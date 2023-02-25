@@ -14,6 +14,10 @@
         {% elif not usersEqual and user.is_authenticated and userFollows%}
         <button onclick="handleUnfollow(event)" data-currentuserid="{{user.id}}" data-requesteduserid="{{requestedUser.id}}" class="unfollow">Unfollow</button>
         {%endif%}
+        <div class="followStatus">
+            <p class="followers">Followers: <span>{{numFollowers}}</span></p>
+            <p class="following">Following: <span>{{numFollowing}}</span></p>
+        </div>
     </div>
     <div class="outerPostList">
         <h2>Posts By User</h2>
@@ -91,6 +95,13 @@
     }
     section.account .info button.unfollow:hover{
         background-color: #BBBBBB;
+    }
+    section.account .info .followStatus{
+        display: flex;
+        margin-top: 20px;
+    }
+    section.account .info p{
+        display: inline-block; margin-right: 20px;
     }
     section.account .outerPostList{
         width: 100%;

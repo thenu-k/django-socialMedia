@@ -105,6 +105,9 @@ def renderAccountPage(request, userID):
     postObjects = requestedUser.postCreatedByUser.all().order_by('-dateCreated')[firstPostCount:lastPostCount]
     # Getting like data
     likeExtrapolator(request, postObjects)
+    # Getting number of followers and following
+    numFollowing = len(requestedUser.followCreatedByUser.all())
+    numFollowers = len(requestedUser.followLinkedToUser.all())
     # Checking auth level
     if(request.user.is_authenticated):
         # Request created by
@@ -117,12 +120,16 @@ def renderAccountPage(request, userID):
             'postObjects': postObjects,
             'requestedUser': requestedUser,
             'usersEqual': True if (requestedUser.id==currentUserObject.id) else False,
-            'userFollows': userFollows
+            'userFollows': userFollows,
+            'numFollowers': numFollowers,
+            'numFollowing': numFollowing
         }
     else:
         payload = {
             'postObjects': postObjects,
-            'requestedUser': requestedUser
+            'requestedUser': requestedUser,
+            'numFollowers': numFollowers,
+            'numFollowing': numFollowing
         }
     return render(request, 'network/Account/account.html', payload)
 
@@ -193,3 +200,4 @@ def handleLikeStatus(request):
                 newLikeObject.save()
                 payload = {'success': True}
         return JsonResponse(payload)
+
