@@ -104,10 +104,15 @@ def renderAccountPage(request, userID):
     if(request.user.is_authenticated):
         # Request created by
         currentUserObject = User.objects.get(id=request.user.id)
+        #Check whether user follows account
+        userFollows = False
+        if Follow.objects.filter(createdByUserKey=currentUserObject, followingUserKey=requestedUser).exists():
+            userFollows = True
         payload = {
             'postObjects': postObjects,
             'requestedUser': requestedUser,
-            'usersEqual': True if (requestedUser.id==currentUserObject.id) else False
+            'usersEqual': True if (requestedUser.id==currentUserObject.id) else False,
+            'userFollows': userFollows
         }
     else:
         payload = {

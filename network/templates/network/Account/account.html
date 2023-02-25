@@ -9,8 +9,10 @@
         {% else %}
         <p class="username">Account page of <span>{{requestedUser.username}}</span></p>
         {% endif %}
-        {% if not usersEqual and user.is_authenticated%}
+        {% if not usersEqual and user.is_authenticated and not userFollows%}
         <button onclick="handleFollow(event)" data-currentuserid="{{user.id}}" data-requesteduserid="{{requestedUser.id}}">Follow</button>
+        {% elif not usersEqual and user.is_authenticated and userFollows%}
+        <button onclick="handleUnfollow(event)" data-currentuserid="{{user.id}}" data-requesteduserid="{{requestedUser.id}}" class="unfollow">Unfollow</button>
         {%endif%}
     </div>
     <div class="outerPostList">
@@ -64,6 +66,13 @@
     }
     section.account .info button:hover{
         background-color: rgb(72, 0, 228);
+    }
+    section.account .info button.unfollow{
+        background-color: #DDDDDD;
+        color: black;
+    }
+    section.account .info button.unfollow:hover{
+        background-color: #BBBBBB;
     }
     section.account .outerPostList{
         width: 100%;
