@@ -201,3 +201,23 @@ def handleLikeStatus(request):
                 payload = {'success': True}
         return JsonResponse(payload)
 
+# Handle post editing
+@csrf_exempt
+def handlePostEdit(request):
+    if request.user.is_authenticated:
+        body_unicode = request.body.decode('utf-8')
+        body = json.loads(body_unicode)
+        userObject = User.objects.get(id=request.user.id)
+        # Checking whether post belongs to user
+        if Post.objects.filter(userKey=userObject, id=body['postID']).exists():
+            postObject = Post.objects.get(id=body['postID'], userKey=userObject)
+            postObject.content = body['newContent']
+            postObject.save()
+            payload = {
+                'success': True
+            }
+        else: 
+            payload = {
+                'success': False
+            }
+        return JsonResponse(payload)

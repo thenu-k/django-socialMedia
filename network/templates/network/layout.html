@@ -24,6 +24,9 @@
                             <a class="nav-link" href="{% url 'createPost' %}">Create Post</a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link" href="/account/{{user.id}}">My Account</a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link" href="{% url 'logout' %}">Log Out</a>
                         </li>
                     {% else %}

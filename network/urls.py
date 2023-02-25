@@ -15,5 +15,6 @@ urlpatterns = [
     path('newfollow', views.newFollow, name='newFollow'),
     path('removefollow', views.removeFollow, name='removeFollow'),
     path('following', views.renderFollowingUserPosts, name='followingUserPosts'),
-    path('likestatus', views.handleLikeStatus, name='handleLikeStatus')
+    path('likestatus', views.handleLikeStatus, name='handleLikeStatus'),
+    path('postedit', views.handlePostEdit,  name='handlePostEdit')
 ]

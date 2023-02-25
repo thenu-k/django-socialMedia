@@ -10,6 +10,15 @@
         {%endif%}
         <p class="dateCreated">{{post.dateCreated}}</p>
         <p class="content">{{post.content}}</p>
+        {% if user.is_authenticated and user.id == post.userKey.id%}
+        <div class="editor">
+            <button class="editorToggle" onclick="turnOnEditor(event, '{{post.content}}')">✎ Edit</button>
+            <form class="editForm" onsubmit="editPost(event, '{{post.id}}')">
+                <textarea name="" id=""></textarea>
+                <button type="submit">Save Edit</button>
+            </form>
+        </div>
+        {%endif%}
         {% if user.is_authenticated  %}
             {% if not post.userLikedThis %}
                 <button class="likeCount like" onclick="handleLikeStatus('{{post.id}}', event)">Like: <span>{{post.likeCount}}</span></button>
@@ -102,6 +111,10 @@
         text-decoration: underline;
         font-weight: 500;
     }
+    div.postlist .post p.off{
+        display: none;
+        height: 0;
+    }
     div.postlist .post a, div.postlist .post p.dateCreated{
         display: flex;
         margin-bottom: 10px;
@@ -139,6 +152,79 @@
         margin-right: 15px;
         padding: 10px;
         border-radius: 3px; 
+    }
+</style>
+<script defer>
+    const turnOnEditor = (event, currentContent) => {
+        const editorParent = event.target.closest('.editor')
+        const postParent = event.target.closest('.post')
+        postParent.querySelector('p.content').classList.add('off')
+        editorParent.classList.add('on')
+        editorParent.querySelector('textarea').value = currentContent
+    }
+    const editPost = async(e, postID) => {
+        e.preventDefault()
+        postID = parseInt(postID)
+        payload = {
+            postID: postID,
+            newContent: event.target.querySelector('textarea').value
+        }
+        const res = await fetch('/postedit',{
+            credentials: 'include',
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(payload)
+        })
+        const data = await  res.json()
+        if(data.success){
+            window.location.reload()
+        }
+    }
+</script>
+<style>
+    div.postlist .post .editor{
+        display: flex;flex-direction: column;
+        margin-top: 10px;
+    }
+    div.postlist .post .editor.on{
+        margin-top: 0;
+    }
+    div.postlist .post .editor button.editorToggle{
+        background-color: inherit;
+        color: #555555;
+        width: fit-content;
+        cursor: pointer;
+    }
+    div.postlist .post .editor.on button.editorToggle{
+        display: none;
+    }
+    div.postlist .post .editor .editForm{
+        display: none;
+    }
+    div.postlist .post .editor.on .editForm{
+        display: flex; flex-direction: column;
+    }
+    div.postlist .post .editor.on .editForm textarea{
+        resize: none;
+        border: 2px solid black;
+        border-radius: 5px;
+        margin-bottom: 10px;
+        box-sizing: border-box;
+        height: 80px;;
+        padding: 10px;
+    }
+    div.postlist .post .editor.on .editForm button{
+        width: fit-content;
+        padding: 3px 10px;
+        border-radius: 3px;
+        color: white;
+        background-color: rgb(81, 0, 255);
+        cursor: pointer;
+    }
+    div.postlist .post .editor.on .editForm button:hover{
+        background-color: rgb(72, 0, 228);
     }
 </style>
 {% endblock %}
