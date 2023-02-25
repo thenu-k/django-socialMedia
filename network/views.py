@@ -178,4 +178,18 @@ def renderFollowingUserPosts(request):
 @csrf_exempt
 def handleLikeStatus(request):
     if request.user.is_authenticated:
-        return JsonResponse({'success': True})
+        body_unicode = request.body.decode('utf-8')
+        body = json.loads(body_unicode)
+        userObject = User.objects.get(id=request.user.id)
+        postObject = Post.objects.get(id=body['postID'])
+        if Like.objects.filter(userKey=userObject, postKey=postObject).exists():
+            if body['isLike']==False:
+                currentLikeObject = Like.objects.get(userKey=userObject, postKey=postObject)
+                currentLikeObject.delete()
+                payload = {'success': True}
+        else:
+            if body['isLike']==True:
+                newLikeObject = Like(postKey=postObject, userKey=userObject)
+                newLikeObject.save()
+                payload = {'success': True}
+        return JsonResponse(payload)
