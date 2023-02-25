@@ -115,3 +115,21 @@ def renderAccountPage(request, userID):
             'requestedUser': requestedUser
         }
     return render(request, 'network/Account/account.html', payload)
+
+# Create new follow
+@csrf_exempt
+def newFollow(request):
+    if request.user.is_authenticated:   
+        body_unicode = request.body.decode('utf-8')
+        body = json.loads(body_unicode)
+        currentUserObject = User.objects.get(id=request.user.id)
+        requestedUserObject = User.objects.get(id=body['requestedUserID'])
+        # check whether a follow exists
+        if Follow.objects.filter(createdByUserKey=currentUserObject, followingUserKey=requestedUserObject).exists():
+            payload = {'created': False}
+        else: 
+            newFollowObject = Follow(createdByUserKey=currentUserObject, followingUserKey=requestedUserObject)
+            newFollowObject.save()
+            payload = {'created': True}
+        return JsonResponse(payload)
+    

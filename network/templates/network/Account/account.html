@@ -9,12 +9,35 @@
         {% else %}
         <p class="username">Account page of <span>{{requestedUser.username}}</span></p>
         {% endif %}
+        {% if not usersEqual and user.is_authenticated%}
+        <button onclick="handleFollow(event)" data-currentuserid="{{user.id}}" data-requesteduserid="{{requestedUser.id}}">Follow</button>
+        {%endif%}
     </div>
     <div class="outerPostList">
         <h2>Posts By User</h2>
         {% include '../PostList/postlist.html' %}
     </div>
 </section>
+<script>
+    const handleFollow = async(e) => {
+        const payload = {
+            currentUserID : e.target.getAttribute('data-currentuserid'),
+            requestedUserID: e.target.getAttribute('data-requesteduserid')
+        }
+        const res = await fetch('/newfollow',{
+            credentials: 'include',
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(payload)
+        })
+        const data = await res.json()
+        if(data.created===true){
+            window.location.reload()
+        }
+    }
+</script>
 <style>
     section.account{
         width: 100%;
@@ -30,6 +53,17 @@
     }
     section.account .info p span{
         font-weight: 600;
+    }
+    section.account .info button{
+        width: fit-content;
+        padding: 10px;
+        margin-top: 20px;
+        background-color: rgb(81, 0, 255);
+        color: white; border-radius: 3px;
+        cursor: pointer;
+    }
+    section.account .info button:hover{
+        background-color: rgb(72, 0, 228);
     }
     section.account .outerPostList{
         width: 100%;
