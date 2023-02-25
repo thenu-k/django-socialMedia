@@ -1,4 +1,36 @@
 {% load static %}
 {% block body %}
-  {{request.user}}
+<div class="postlist">
+    {% for post in postObjects%}
+      <div class="post" id="{{post.id}}">
+        <a href="/account/{{post.userKey.id}}" class="username">{{post.userKey}}</a>
+        <p class="dateCreated">{{post.dateCreated}}</p>
+        <p class="content">{{post.content}}</p>
+      </div>
+    {%endfor%}
+</div>
+<style>
+    div.postlist{
+        width: 50%;
+        display: flex; flex-direction: column;
+    }
+    div.postlist .post{
+        width: 100%;
+        display: flex; flex-direction: column; 
+        box-sizing: border-box;
+        padding: 20px;
+        box-shadow: 0 0 3px #BBBBBB;
+        border-radius: 5px;
+        margin-bottom: 15px;
+
+    }
+    div.postlist .post a{
+        text-decoration: underline;
+        font-weight: 500;
+    }
+    div.postlist .post a, div.postlist .post p.dateCreated{
+        display: flex;
+        margin-bottom: 10px;
+    }
+</style>
 {% endblock %}
