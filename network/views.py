@@ -6,6 +6,7 @@ from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 from .models import *
 import json
+from django.core import serializers
 
 def index(request):
     #Finding which posts the user needs
@@ -90,3 +91,27 @@ def submitPost(request):
         createdByUserObject = User.objects.get(id=request.user.id)
         Post(content=body['content'], userKey=createdByUserObject).save()
         return JsonResponse({'success': 'true'})
+    
+# Rendering account page
+def renderAccountPage(request, userID):
+    #Finding which posts the user needs
+    firstPostCount = int(request.GET.get('first', '0'))
+    lastPostCount = int(request.GET.get('last', '10'))
+    #Getting the required posts
+    requestedUser = User.objects.get(id=userID)
+    postObjects = requestedUser.postCreatedByUser.all().order_by('-dateCreated')[firstPostCount:lastPostCount]
+    # Checking auth level
+    if(request.user.is_authenticated):
+        # Request created by
+        currentUserObject = User.objects.get(id=request.user.id)
+        payload = {
+            'postObjects': postObjects,
+            'requestedUser': requestedUser,
+            'usersEqual': True if (requestedUser.id==currentUserObject.id) else False
+        }
+    else:
+        payload = {
+            'postObjects': postObjects,
+            'requestedUser': requestedUser
+        }
+    return render(request, 'network/Account/account.html', payload)

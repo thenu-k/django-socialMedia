@@ -10,5 +10,6 @@ urlpatterns = [
     path("register", views.register, name="register"),
     path("test", views.test, name='test'),
     path('createpost', views.renderCreatePost, name='createPost'),
-    path('submitpost', views.submitPost, name='submitPost')
+    path('submitpost', views.submitPost, name='submitPost'),
+    path('account/<int:userID>', views.renderAccountPage, name='accountPage')
 ]

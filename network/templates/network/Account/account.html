@@ -1,0 +1,39 @@
+{% extends "network/layout.html" %}
+{% load static %}
+{% block body %}
+<section class="account">
+    <div class="info">
+        <h2>Account</h2>
+        <p class="username">Account page of <span>{{requestedUser.username}}</span></p>
+    </div>
+    <div class="outerPostList">
+        <h2>Posts By User</h2>
+        {% include '../PostList/postlist.html' %}
+    </div>
+</section>
+<style>
+    section.account{
+        width: 100%;
+        display: flex; flex-direction: column;
+    }
+    section.account .info{
+        margin: 30px 0;
+        display: flex; flex-direction: column;
+    }
+    section.account .info h2{
+        font-size: 1.5em; font-weight: 500;
+        margin-bottom: 20px;
+    }
+    section.account .info p span{
+        font-weight: 600;
+    }
+    section.account .outerPostList{
+        width: 100%;
+        display: flex; flex-direction: column;
+    }
+    section.account .outerPostList h2{
+        margin-bottom: 20px;
+        font-weight: 500; font-size: 1.5em;
+    }
+</style>
+{% endblock %}
