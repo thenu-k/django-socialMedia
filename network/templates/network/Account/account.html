@@ -4,7 +4,11 @@
 <section class="account">
     <div class="info">
         <h2>Account</h2>
+        {% if user.id == requestedUser.id %}
+        <p class="username">Account page of <span>{{requestedUser.username}} (You)</span></p>
+        {% else %}
         <p class="username">Account page of <span>{{requestedUser.username}}</span></p>
+        {% endif %}
     </div>
     <div class="outerPostList">
         <h2>Posts By User</h2>
