@@ -1,0 +1,18 @@
+{% extends "network/layout.html" %}
+
+{% block body %}
+<section class="index">
+    <h2>All Posts</h2>
+    {% include './PostList/postlist.html' %}
+</section>
+<style>
+    section.index{
+        width: 100%;
+        display: flex; flex-direction: column;
+    }
+    section.index h2{
+        font-size: 1.5em; font-weight: 500;
+        margin: 30px 0;
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,78 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>{% block title %}Social Network{% endblock %}</title>
+        <link href="{% static 'network/styles.css' %}" rel="stylesheet">
+    </head>
+    <body>
+
+        <nav class="navbar center">
+            <div class="inner">
+                <a class="title" href="#">Bitter</a>
+                <div>
+                  <ul class="list">
+                    <li class="nav-item">
+                      <a class="nav-link" href="{% url 'index' %}">All Posts</a>
+                    </li>
+                    {% if user.is_authenticated %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Following</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'createPost' %}">Create Post</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'logout' %}">Log Out</a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'login' %}">Log In</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'register' %}">Register</a>
+                        </li>
+                    {% endif %}
+                  </ul>
+                </div>
+            </div>
+          </nav>
+        
+        <div class="innerBody">
+            {% block body %}
+            {% endblock %}
+        </div>
+        <style>
+            body{
+                display: flex; flex-direction: column; align-items: center;
+            }
+            nav.navbar{
+                width: 100%;
+                display: flex; align-items: center;
+                background-color: #EEEEEE;
+            }
+            nav .inner{width: 95%; display: flex; align-items: center;}
+            nav .list{
+                display: flex;
+                margin-left: 20px;
+            }
+            nav a{
+                height: 60px;
+                padding: 0 20px;
+                display: flex; align-items: center; justify-content: center;
+                cursor: pointer;
+            }
+            nav a:hover{color: #333333;}
+            nav .inner>a{
+                padding: 0;
+                font-weight: 600;
+                font-size: 1.2em;
+            }
+            body> .innerBody{
+                width: 95%;
+                display: flex;flex-direction: column;
+            }
+        </style>
+    </body>
+</html>
