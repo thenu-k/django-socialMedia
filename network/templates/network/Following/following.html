@@ -1,5 +1,18 @@
 {% extends "network/layout.html" %}
 {% load static %}
 {% block body %}
-    hi there
+<section class="following">
+    <h2>Following User Posts</h2>
+    {% include '../PostList/postlist.html' %}
+</section>
+<style>
+    section.following{
+        margin: 30px 0;
+    }
+    section.following h2{
+        font-weight: 500;
+        font-size: 1.5em;
+        margin-bottom: 20px;
+    }
+</style>
 {% endblock %}

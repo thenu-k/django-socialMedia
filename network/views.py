@@ -157,4 +157,12 @@ def removeFollow(request):
     
 # Render following user's post page
 def renderFollowingUserPosts(request):
-    return render(request, 'network/Following/following.html')
+    if(request.user.is_authenticated):
+        # Getting posts
+        userObject = User.objects.get(id = request.user.id)
+        followingUserObjects  = userObject.followCreatedByUser.all()
+        postObjects = Post.objects.filter(userKey__in=followingUserObjects.values('followingUserKey')).order_by('-dateCreated')
+        payload = {
+            'postObjects': postObjects
+        }
+        return render(request, 'network/Following/following.html', payload)
