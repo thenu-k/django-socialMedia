@@ -155,3 +155,6 @@ def removeFollow(request):
             payload = {'removed': False}
         return JsonResponse(payload)
     
+# Render following user's post page
+def renderFollowingUserPosts(request):
+    return render(request, 'network/Following/following.html')
