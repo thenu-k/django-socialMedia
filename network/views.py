@@ -10,7 +10,7 @@ import json
 def index(request):
     #Finding which posts the user needs
     firstPostCount = int(request.GET.get('first', '0'))
-    lastPostCount = int(request.GET.get('last', '9'))
+    lastPostCount = int(request.GET.get('last', '10'))
     #Getting the required posts
     postObjects = Post.objects.filter().order_by('-dateCreated')[firstPostCount:lastPostCount]
     payload = {

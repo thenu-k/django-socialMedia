@@ -8,7 +8,36 @@
         <p class="content">{{post.content}}</p>
       </div>
     {%endfor%}
+    <div class="pagination">
+        <button onclick="pageBefore()" id="prevButton">Previous</button>
+        <button onclick="pageNext()" id="nextButton">Next</button>
+    </div>
 </div>
+<script>
+    const currentNumPosts = document.querySelectorAll('.post').length
+    //URl params
+    let urlParams = new URLSearchParams(window.location.search)
+    urlParams = {
+        first: (urlParams.get('first')) ? parseInt(urlParams.get('first')) : 0, 
+        last: (urlParams.get('last')) ? parseInt(urlParams.get('last')) : 10
+    }
+    // Disabling buttons
+    prevButton.disabled = false
+    if(urlParams.first===0){
+        prevButton.disabled = true
+    }
+    nextButton.disabled = false
+    if(currentNumPosts<10){
+        nextButton.disabled = true
+    }
+    // Client side pagination
+    const pageNext = () => {
+        window.location.href = `/?first=${urlParams.first+10}&last=${urlParams.last+10}`
+    }
+    const pageBefore = () => {
+        window.location.href = `/?first=${urlParams.first-10}&last=${urlParams.last-10}`
+    }
+</script>
 <style>
     div.postlist{
         width: 50%;
@@ -31,6 +60,16 @@
     div.postlist .post a, div.postlist .post p.dateCreated{
         display: flex;
         margin-bottom: 10px;
+    }
+    div.postlist  .pagination{
+        margin: 20px 0;
+        width: 100%;
+        display: flex; justify-content: center;
+    }
+    div.postlist  .pagination button{
+        margin-right: 15px;
+        padding: 10px;
+        border-radius: 3px; 
     }
 </style>
 {% endblock %}
