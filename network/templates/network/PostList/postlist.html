@@ -8,12 +8,12 @@
         <p class="content">{{post.content}}</p>
         {% if user.is_authenticated  %}
             {% if not post.userLikedThis %}
-                <button class="likeCount" onsubmit="likePost('{{post.id}}')">Like: {{post.likeCount}}</button>
+                <button class="likeCount like" onclick="handleLikeStatus('{{post.id}}', event)">Like: <span>{{post.likeCount}}</span></button>
             {% else %}
-                <button class="likeCount reverse" onsubmit="unlikePost('{{post.id}}')">Liked: {{post.likeCount}}</button>
+                <button class="likeCount unlike" onclick="handleLikeStatus('{{post.id}}', event)">Liked: <span>{{post.likeCount}}</span></button>
             {% endif %}
         {% else %}
-            <button class="likeCount" disabled>Like: {{post.likeCount}}</button>
+            <button class="likeCount disabled" disabled>Likes: {{post.likeCount}}</button>
         {% endif %}
       </div>
     {%endfor%}
@@ -22,6 +22,39 @@
         <button onclick="pageNext()" id="nextButton">Next</button>
     </div>
 </div>
+<script defer>
+    const handleLikeStatus= async(postID, e) => {
+        clickedButton = e.target.closest('button.likeCount')
+        const currentLikeCount = parseInt(clickedButton.querySelector('span').innerHTML); 
+        const isLike = clickedButton.classList.contains('like') ? true : false;
+        const payload = {
+            isLike: isLike,
+            postID: postID
+        }
+        try{
+            const res = await fetch('/submitpost',{
+                credentials: 'include',
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(payload)
+            })
+            const data = await  res.json()
+            console.log(data)
+            // Replace button
+            if(isLike){
+                clickedButton.classList.replace('like', 'unlike')
+                clickedButton.innerHTML = `Liked: <span>${currentLikeCount+1}</span>`
+            }else{
+                clickedButton.classList.replace('unlike', 'like')
+                clickedButton.innerHTML = `Like: <span>${currentLikeCount-1}</span>`
+            }
+        }catch(e){
+            console.log(e)
+        }
+    }
+</script>
 <script>
     const currentNumPosts = document.querySelectorAll('.post').length
     //URl params
@@ -82,12 +115,17 @@
     div.postlist .post button.likeCount:hover{
         background-color: rgb(72, 0, 228);
     }
-    div.postlist .post button.likeCount.reverse{
+    div.postlist .post button.likeCount.unlike{
         background-color: #DDDDDD;
         color: black;
     }
-    div.postlist .post button.likeCount.reverse:hover{
+    div.postlist .post button.likeCount.unlike:hover{
         background-color: #BBBBBB;
+    }
+    div.postlist .post button.likeCount.disabled{
+        background-color: #DDDDDD;
+        cursor: default;
+        color: black;
     }
     div.postlist  .pagination{
         margin: 20px 0;
