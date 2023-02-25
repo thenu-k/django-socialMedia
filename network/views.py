@@ -173,3 +173,9 @@ def renderFollowingUserPosts(request):
             'postObjects': postObjects
         }
         return render(request, 'network/Following/following.html', payload)
+    
+# Handle like creation and deletion
+@csrf_exempt
+def handleLikeStatus(request):
+    if request.user.is_authenticated:
+        return JsonResponse({'success': True})
