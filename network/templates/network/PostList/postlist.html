@@ -3,7 +3,11 @@
 <div class="postlist">
     {% for post in postObjects%}
       <div class="post" id="{{post.id}}">
-        <a href="/account/{{post.userKey.id}}" class="username">{{post.userKey}}</a>
+        {% if user.is_authenticated and user.id == post.userKey.id%}
+            <a href="/account/{{post.userKey.id}}" class="username">{{post.userKey}}(you)</a>
+        {% else %}
+            <a href="/account/{{post.userKey.id}}" class="username">{{post.userKey}}</a>
+        {%endif%}
         <p class="dateCreated">{{post.dateCreated}}</p>
         <p class="content">{{post.content}}</p>
         {% if user.is_authenticated  %}
@@ -63,13 +67,13 @@
         last: (urlParams.get('last')) ? parseInt(urlParams.get('last')) : 10
     }
     // Disabling buttons
-    prevButton.disabled = false
+    prevButton.style.display = 'flex'
     if(urlParams.first===0){
-        prevButton.disabled = true
+        prevButton.style.display = 'none'
     }
-    nextButton.disabled = false
+    nextButton.style.display = 'flex'
     if(currentNumPosts<10){
-        nextButton.disabled = true
+        nextButton.style.display = 'none'
     }
     // Client side pagination
     const pageNext = () => {
