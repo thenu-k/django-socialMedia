@@ -7,6 +7,7 @@ from django.views.decorators.csrf import csrf_exempt
 from .models import *
 import json
 from django.core import serializers
+from .helpers import *
 
 def index(request):
     #Finding which posts the user needs
@@ -14,6 +15,8 @@ def index(request):
     lastPostCount = int(request.GET.get('last', '10'))
     #Getting the required posts
     postObjects = Post.objects.filter().order_by('-dateCreated')[firstPostCount:lastPostCount]
+    # Getting like data
+    likeExtrapolator(request, postObjects)
     payload = {
         'postObjects': postObjects
     }
