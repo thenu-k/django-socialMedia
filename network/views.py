@@ -8,8 +8,11 @@ from .models import *
 import json
 
 def index(request):
-    #Getting all posts
-    postObjects = Post.objects.filter().order_by('-dateCreated')
+    #Finding which posts the user needs
+    firstPostCount = int(request.GET.get('first', '0'))
+    lastPostCount = int(request.GET.get('last', '9'))
+    #Getting the required posts
+    postObjects = Post.objects.filter().order_by('-dateCreated')[firstPostCount:lastPostCount]
     payload = {
         'postObjects': postObjects
     }
