@@ -9,7 +9,7 @@ import json
 
 def index(request):
     #Getting all posts
-    postObjects = Post.objects.all()
+    postObjects = Post.objects.filter().order_by('-dateCreated')
     payload = {
         'postObjects': postObjects
     }
@@ -86,4 +86,4 @@ def submitPost(request):
         body = json.loads(body_unicode)
         createdByUserObject = User.objects.get(id=request.user.id)
         Post(content=body['content'], userKey=createdByUserObject).save()
-        return JsonResponse({'success': body})
+        return JsonResponse({'success': 'true'})

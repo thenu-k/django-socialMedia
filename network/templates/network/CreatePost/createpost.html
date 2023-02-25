@@ -24,8 +24,10 @@
             body: JSON.stringify(payload)
         })
         const data = await  res.json()
-        console.log(data)
-        contentInput.value = ''
+        if(data.success==='true'){
+            contentInput.value = ''
+            window.location.href = '/'
+        }
     }
 </script>
 <style>
