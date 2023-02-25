@@ -3,9 +3,9 @@ from django.db import IntegrityError
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import render
 from django.urls import reverse
-
+from django.views.decorators.csrf import csrf_exempt
 from .models import *
-
+import json
 
 def index(request):
     #Getting all posts
@@ -77,3 +77,13 @@ def test(request):
 # Rendering create post
 def renderCreatePost(request):
     return render(request, 'network/CreatePost/createpost.html')
+
+# Submit post
+@csrf_exempt
+def submitPost(request):
+    if request.user.is_authenticated:
+        body_unicode = request.body.decode('utf-8')
+        body = json.loads(body_unicode)
+        createdByUserObject = User.objects.get(id=request.user.id)
+        Post(content=body['content'], userKey=createdByUserObject).save()
+        return JsonResponse({'success': body})

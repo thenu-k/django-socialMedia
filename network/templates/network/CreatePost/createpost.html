@@ -1,5 +1,65 @@
 {% extends "network/layout.html" %}
 {% load static %}
 {% block body %}
-  
+<section class="createpost">
+    <form onsubmit="createPost(event)">
+        {% csrf_token %}
+        <h2>Create New Post</h2>
+        <textarea name="" id="contentInput" placeholder="Your post here."  required></textarea>
+        <button type="submit">Submit Post</button>
+    </form>
+</section>
+<script>
+    const createPost = async(e) => {
+        e.preventDefault()
+        const payload = {
+            content: contentInput.value
+        }
+        const res = await fetch('/submitpost',{
+            credentials: 'include',
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(payload)
+        })
+        const data = await  res.json()
+        console.log(data)
+        contentInput.value = ''
+    }
+</script>
+<style>
+    section.createpost{
+        display: flex; flex-direction: column;
+    }
+    section.createpost form{
+        display: flex; flex-direction: column;
+    }
+    section.createpost form h2{
+        font-size: 1.5em; font-weight: 500;
+        margin: 30px 0;
+    }
+
+    section.createpost textarea{
+        resize: none;
+        min-height: 100px;
+        width: 400px;
+        border-radius: 5px;
+        border: 1px solid #999999;
+        box-sizing: border-box;
+        padding: 10px;
+        margin-bottom: 40px;
+    }
+    section.createpost button{
+        width: fit-content;
+        padding: 20px;
+        border-radius: 5px;
+        background-color: rgb(81, 0, 255);
+        color: white; font-weight: 600;
+        cursor: pointer;
+    }
+    section.createpost button:hover{
+        background-color: rgb(72, 0, 228);
+    }
+</style>
 {% endblock %}
