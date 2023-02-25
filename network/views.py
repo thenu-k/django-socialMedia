@@ -103,6 +103,8 @@ def renderAccountPage(request, userID):
     #Getting the required posts
     requestedUser = User.objects.get(id=userID)
     postObjects = requestedUser.postCreatedByUser.all().order_by('-dateCreated')[firstPostCount:lastPostCount]
+    # Getting like data
+    likeExtrapolator(request, postObjects)
     # Checking auth level
     if(request.user.is_authenticated):
         # Request created by
@@ -168,4 +170,6 @@ def renderFollowingUserPosts(request):
         payload = {
             'postObjects': postObjects
         }
+        # Getting like data
+        likeExtrapolator(request, postObjects)
         return render(request, 'network/Following/following.html', payload)
