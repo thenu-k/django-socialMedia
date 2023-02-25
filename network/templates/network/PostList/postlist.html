@@ -6,7 +6,15 @@
         <a href="/account/{{post.userKey.id}}" class="username">{{post.userKey}}</a>
         <p class="dateCreated">{{post.dateCreated}}</p>
         <p class="content">{{post.content}}</p>
-        {{post.likeCount}}{{post.userLikedThis}}
+        {% if user.is_authenticated  %}
+            {% if not post.userLikedThis %}
+                <button class="likeCount" onsubmit="likePost('{{post.id}}')">Like: {{post.likeCount}}</button>
+            {% else %}
+                <button class="likeCount reverse" onsubmit="unlikePost('{{post.id}}')">Liked: {{post.likeCount}}</button>
+            {% endif %}
+        {% else %}
+            <button class="likeCount" disabled>Like: {{post.likeCount}}</button>
+        {% endif %}
       </div>
     {%endfor%}
     <div class="pagination">
@@ -61,6 +69,25 @@
     div.postlist .post a, div.postlist .post p.dateCreated{
         display: flex;
         margin-bottom: 10px;
+    }
+    div.postlist .post button.likeCount{
+        width: fit-content;
+        padding: 3px 10px;
+        border-radius: 3px;
+        margin-top: 20px;
+        cursor: pointer;
+        background-color: rgb(81, 0, 255);
+        color: white;
+    }
+    div.postlist .post button.likeCount:hover{
+        background-color: rgb(72, 0, 228);
+    }
+    div.postlist .post button.likeCount.reverse{
+        background-color: #DDDDDD;
+        color: black;
+    }
+    div.postlist .post button.likeCount.reverse:hover{
+        background-color: #BBBBBB;
     }
     div.postlist  .pagination{
         margin: 20px 0;

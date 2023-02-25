@@ -167,9 +167,9 @@ def renderFollowingUserPosts(request):
         userObject = User.objects.get(id = request.user.id)
         followingUserObjects  = userObject.followCreatedByUser.all()
         postObjects = Post.objects.filter(userKey__in=followingUserObjects.values('followingUserKey')).order_by('-dateCreated')
+        # Getting like data
+        likeExtrapolator(request, postObjects)
         payload = {
             'postObjects': postObjects
         }
-        # Getting like data
-        likeExtrapolator(request, postObjects)
         return render(request, 'network/Following/following.html', payload)
