@@ -12,5 +12,6 @@ urlpatterns = [
     path('createpost', views.renderCreatePost, name='createPost'),
     path('submitpost', views.submitPost, name='submitPost'),
     path('account/<int:userID>', views.renderAccountPage, name='accountPage'),
-    path('newfollow', views.newFollow, name='newFollow')
+    path('newfollow', views.newFollow, name='newFollow'),
+    path('removefollow', views.removeFollow, name='removeFollow')
 ]

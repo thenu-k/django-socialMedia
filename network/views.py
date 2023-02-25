@@ -137,4 +137,21 @@ def newFollow(request):
             newFollowObject.save()
             payload = {'created': True}
         return JsonResponse(payload)
+
+# Remove follow
+@csrf_exempt
+def removeFollow(request):
+    if request.user.is_authenticated:   
+        body_unicode = request.body.decode('utf-8')
+        body = json.loads(body_unicode)
+        currentUserObject = User.objects.get(id=request.user.id)
+        requestedUserObject = User.objects.get(id=body['requestedUserID'])
+        # check whether a follow exists
+        if Follow.objects.filter(createdByUserKey=currentUserObject, followingUserKey=requestedUserObject).exists():
+            followObject = Follow.objects.get(createdByUserKey=currentUserObject, followingUserKey=requestedUserObject)
+            followObject.delete()
+            payload = {'removed': True}
+        else: 
+            payload = {'removed': False}
+        return JsonResponse(payload)
     

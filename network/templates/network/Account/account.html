@@ -39,6 +39,24 @@
             window.location.reload()
         }
     }
+    const handleUnfollow = async(e) => {
+        const payload = {
+            currentUserID : e.target.getAttribute('data-currentuserid'),
+            requestedUserID: e.target.getAttribute('data-requesteduserid')
+        }
+        const res = await fetch('/removefollow',{
+            credentials: 'include',
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(payload)
+        })
+        const data = await res.json()
+        if(data.removed===true){
+            window.location.reload()
+        }
+    }
 </script>
 <style>
     section.account{
