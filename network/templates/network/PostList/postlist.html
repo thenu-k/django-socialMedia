@@ -32,10 +32,10 @@
     }
     // Client side pagination
     const pageNext = () => {
-        window.location.href = `/?first=${urlParams.first+10}&last=${urlParams.last+10}`
+        window.location.href = window.location.href.split(/[?#]/)[0] + `?first=${urlParams.first+10}&last=${urlParams.last+10}`
     }
     const pageBefore = () => {
-        window.location.href = `/?first=${urlParams.first-10}&last=${urlParams.last-10}`
+        window.location.href = window.location.href.split(/[?#]/)[0] + `?first=${urlParams.first-10}&last=${urlParams.last-10}`
     }
 </script>
 <style>
